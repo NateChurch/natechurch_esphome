@@ -2,7 +2,7 @@
 
 ## Summary
 
-A lot of things were lost on my when I started this journey. As I learned not only how to do things but the why, I decided to share that knowledge wherever possible. This repo is designed with my opinionated setup of esphome and here I explain my reasoning. I am open to suggestions.
+A lot of things were lost on my when I started this journey. As I learned not only how to do things but the why, I decided to share that knowledge wherever possible. This repo is designed with my opinionated setup of esphome and here I explain my reasoning and my decisions. I am open to suggestions and time permitting, I can answer any questions you might have.
 
 ## mqtt
 
