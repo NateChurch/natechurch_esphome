@@ -1,0 +1,9 @@
+substitutions:
+  diagnostic_interval: "300s" # Default 5 minutes in milliseconds
+  heartbeat_interval: "60s" # Default 1 minute in milliseconds
+  measurement_interval: "60s" # Default 1 minute in milliseconds
+  log_level: INFO
+  name: unknown 
+  friendly_name: unknown #change (spaces)
+  icon: "mdi:unknown-icon"
+  area: unknown

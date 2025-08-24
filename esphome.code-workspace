@@ -1,0 +1,30 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+    "terminal.integrated.env.windows": {
+      "PYTHONPATH": "${workspaceFolder}/src",
+      "POETRY_VIRTUALENVS_IN_PROJECT": "true",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "editor.formatOnSave": true,
+    "[python]": {
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+      },
+      "editor.formatOnType": true
+    },
+    "jupyter.notebookFileRoot": "${workspaceFolder}/src",
+    // "python.languageServer": "Pylance", // Removed deprecated setting
+    "python.analysis.diagnosticSeverityOverrides": {
+      "reportMissingModuleSource": "none",
+      "reportShadowedImports": "none"
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell"
+  }
+}

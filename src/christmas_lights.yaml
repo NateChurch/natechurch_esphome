@@ -1,0 +1,21 @@
+substitutions:
+  name: christmas_lights
+  friendly_name: "Christmas Lights"
+  icon: "mdi:string-lights"
+  # Higher value gives lower watt readout
+  current_res: "0.001"
+  # Lower value gives lower voltage readout
+  voltage_div: "770"
+
+# The Christmas lights sometimes need a little help being found after 
+#      being unplugged for 10 months, so I reference them by IP
+# wifi:
+#   use_address: 192.168.0.256
+
+packages:
+  defaults: !include templates/defaults.yaml
+  mqtt: !include templates/mqtt.yaml
+  common: !include templates/common.yaml
+  wyze_outdoor_plug: !include templates/wyze_outdoor_plug.yaml
+  
+

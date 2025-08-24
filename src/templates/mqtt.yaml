@@ -1,0 +1,9 @@
+mqtt:
+  broker: !secret mqtt_broker
+  username: !secret mqtt_user
+  password: !secret mqtt_pass
+  topic_prefix: esphome/${name}
+  discovery: true
+  discovery_retain: true
+  discovery_prefix: homeassistant
+  discovery_unique_id_generator: legacy

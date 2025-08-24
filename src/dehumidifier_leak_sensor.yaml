@@ -1,0 +1,26 @@
+substitutions:
+  name: dehumidifier_leak_sensor 
+  friendly_name: Dehumidifier Leak Sensor
+  icon: "mdi:water-alert"
+  area: family_room
+
+  # Update Intervals
+  measurement_interval: "10s"
+  diagnostic_interval: "300s"
+  heartbeat_interval: "10s"
+
+  # Logging Settings
+  log_level: "DEBUG" # Log level: NONE, ERROR, WARN, INFO, DEBUG, VERBOSE
+
+  # GPIO Pin Configuration for D1 Mini v4
+  gpio_alert_led: D2      # Built-in LED on D1 Mini (D2 pin)
+  gpio_buzzer: D1         # D1 on D1 Mini - Safe pin for buzzer
+  gpio_power_probe: D5    # D5 on D1 Mini - Your probe power connection
+  gpio_sensor_probe: A0   # Analog pin for water detection probe
+
+packages:
+  defaults: !include templates/defaults.yaml
+  mqtt: !include templates/mqtt.yaml
+  common: !include templates/common.yaml
+  leak_sensor: !include templates/leak_sensor.yaml
+

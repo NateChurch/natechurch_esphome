@@ -1,0 +1,99 @@
+esp8266:
+  board: d1_mini
+
+# ESPHome Leak Sensor Configuration
+esphome:
+  name: ${name}
+  area: ${area}
+  on_boot:
+    - priority: -10
+      then:
+        # Wait for WiFi and MQTT connection
+        - delay: 5s
+        # Send boot status
+        - mqtt.publish:
+            topic: "esphome/${name}/status"
+            payload: "online"
+
+# Leak check interval automation
+interval:
+  - interval: ${measurement_interval}
+    then:
+      - switch.turn_on: power_probe           # power on
+      - delay: 10ms                           # wait
+      - component.update: analog_leak_sensor  # check for leaks
+      - delay: 10ms                           # wait
+      - switch.turn_off: power_probe          # power off
+
+# Binary sensor for leak detection
+binary_sensor:
+  - platform: analog_threshold
+    name: "Water Leak Detected"
+    id: leak_detected
+    sensor_id: analog_leak_sensor
+    threshold: 100
+    device_class: moisture
+    filters:
+      - delayed_on: 100ms
+      - delayed_off: 5s   # Keep alert for 5 seconds
+    on_press:
+      then:
+        - switch.turn_on: alert_led
+        - switch.turn_on: buzzer
+        - logger.log: "LEAK DETECTED!"
+        - mqtt.publish:
+            topic: "esphome/${name}/leak_detected"
+            payload: "true"
+        - mqtt.publish:
+            topic: "esphome/${name}/alert"
+            payload: '{"device": "leak-sensor", "location": "${area}", "status": "detected"}'
+        # Turn off buzzer after 10 seconds (but leave LED on)
+        - delay: 10s
+        - switch.turn_off: buzzer
+    on_release:
+      then:
+        - switch.turn_off: alert_led
+        - switch.turn_off: buzzer 
+        - logger.log: "Leak cleared"
+        - mqtt.publish:
+            topic: "esphome/${name}/leak_detected"
+            payload: "false"
+        - mqtt.publish:
+            topic: "esphome/${name}/alert"
+            payload: '{"device": "leak-sensor", "location": "${area}", "status": "cleared"}'
+
+# Analog sensor for raw water detection values
+sensor:
+  - platform: adc
+    pin: ${gpio_sensor_probe}
+    id: analog_leak_sensor
+    name: "Water Level"
+    update_interval: never # Only update when triggered by interval automation
+    unit_of_measurement: ""
+    accuracy_decimals: 0
+    filters:
+      - multiply: 1024 # Convert to 0-1024 range
+
+# LED indicator (built-in LED)
+switch:
+  - platform: gpio
+    pin:
+      number: ${gpio_alert_led}
+      inverted: true # Built-in LED is active LOW
+    id: alert_led
+    name: "Alert LED"
+
+  # Buzzer control
+  - platform: gpio
+    pin: ${gpio_buzzer}
+    id: buzzer
+    name: "Buzzer"
+
+  # Probe power control (to prevent corrosion)
+  - platform: gpio
+    pin: ${gpio_power_probe}
+    id: power_probe
+    name: "Probe Power"
+    restore_mode: ALWAYS_OFF
+    disabled_by_default: true
+    entity_category: diagnostic
